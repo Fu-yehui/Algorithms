@@ -1,14 +1,19 @@
 package list;
+
+
 /**
  * 顺序结构实现的线性表
  * @author roger
- *
  */
 public class ContiguousList {
 	
-	public static Object[] list;
-	
-	public static int point=0;   //线性表中元素的个数
+	private  Object[] list;
+
+
+	/**
+	 *@param 线性表中元素的个数
+	 */
+	private  int point=0;
 	
 	public ContiguousList(int size) {
 		
@@ -19,52 +24,62 @@ public class ContiguousList {
 	
 	/**
 	 * 获取线性表中第i个元素
-	 * @param i
+	 * @param i 参数的位数
 	 * @return 若获取成功 则返回该元素的值，否则返回-1
 	 */
-	public Status get(int i) {
-		if(point==0||i<1||i>point)
-			return new Status("失败!");
-		return new Status("成功!",list[i-1]);
+	public Object get(int i) throws IndexOutOfBoundsException {
+		if(point==0||i<1||i>point) {
+			throw    new IndexOutOfBoundsException();
+		}
+
+		return list[i-1];
 		
 	
 	}
 	
 	/**
 	 * 在线性表中第i个位置插入新元素element
-	 * @param i   
-	 * @param element
-	 * @return
+	 * @param i   插入元素的位数
+	 * @param element 插入元素的值
+	 *
 	 */
-	public Status insert(int i,Object element) {
-		
-		if(i<1||i>point+1||point==list.length)
-			
-			return new Status("失败!");
-		if(i==point+1)list[i]=element;
-		for(int k=point;k>=i;k--) {
-			list[k]=list[k-1];
+	public void insert(int i,Object element)  throws IndexOutOfBoundsException {
+		//插入范围 1～point+1
+		if(i<1||i>point+1||point==list.length) {
+			throw new IndexOutOfBoundsException();
 		}
+
+		if(i<=point) {
+			for (int k = point; k >= i; k--) {
+				list[k] = list[k - 1];
+			}
+		}
+		list[i-1]=element;
+		point++;
 		
-		return new Status("成功!",element);
+
 		
 	}
 	
 	/**
 	 * 删除线性表中第i个位置的元素,若成功则返回该值
-	 * @param i
+	 * @param i 删除元素的位数
 	 * @return
 	 */
-	public Status delete(int i) {
-		if(point==0||i<1||i>point) 
-		
-		return new Status("失败!");
-		
+	public Object delete(int i)  throws Exception {
+		if(point==0||i<1||i>point) {
+			throw  new IndexOutOfBoundsException();
+		}
+
+		if(i<point){
+			for(int k=point-1;k>=i;k--) {
+				list[k-1]=list[k];
+			}
+		}
 		Object o=list[i-1];
-		if(i==point-1) {
-		list[i-1]=null;}
-		
-		return new Status("成功！",o);
+		point--;
+		return o;
+
 			
 		
 		
@@ -74,35 +89,57 @@ public class ContiguousList {
 	 * @param data
 	 * @return
 	 */
-	public Status add(Object data) {
-		if(point==list.length)return new Status("线性表已满！");
+	public void add(Object data) throws Exception {
+		if(point==list.length) {
+			throw  new IndexOutOfBoundsException();
+		}
 		list[point]=data;
 		point+=1;
-		return new Status("尾部插入成功！",data);
+
 	}
 	/**
 	 * 从线性表尾部移除元素
 	 * @return
 	 */
-	public Status remove() {
-		if(point<1)return new Status("线性表为空,无法移除!");
+	public Object remove() throws Exception{
+		if(point<1) {
+			throw  new IndexOutOfBoundsException();
+		}
 		Object o=list[point-1];
 		point-=1;
-		return new Status("移除成功！",o);
+		return o;
 	}
-	public static void main(String[] args) {
-		ContiguousList list=new ContiguousList(3);
-		System.out.println(list.add((Object)33).info);
-	//	System.out.println(list.remove().info);
-		System.out.println(list.add((Object)44).info);
-		System.out.println(list.add((Object)55).info);
-		System.out.println(list.add((Object)66).info);
-		for(Object o:list.list) {
-			System.out.print(o+" ");
+	@Override
+	public String toString(){
+		StringBuilder sb=new StringBuilder();
+		for(int i=0;i<point;i++){
+			sb.append(list[i]+" ");
 		}
-		
-		
-	
+		return sb.toString();
+	}
+
+
+	public static void main(String[] args) throws Exception {
+
+		ContiguousList list=new ContiguousList(5);
+		list.insert(1,1111);
+		list.insert(2,2222);
+		list.insert(3,3333);
+		System.out.println(list.get(1));
+		System.out.println(list.get(2));
+		System.out.println(list.get(3));
+		System.out.println("删除第二个元素： "+list.delete(2));
+
+		System.out.println(list.toString());
+
+		list.add("first");
+		list.add("second");
+		list.add("third");
+
+		System.out.println(list.toString());
+
+		System.out.println("从线性表尾部删除一个元素： "+list.remove());
+		System.out.println(list.toString());
 		
 	}
 }
