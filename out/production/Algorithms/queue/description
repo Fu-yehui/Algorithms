@@ -1,0 +1,14 @@
+队列也是一种特殊的线性表
+
+分为顺序存储和链式存储两种
+
+顺序存储：容易出现假溢出，所以使用
+
+    循环队列：front指针指向队列头元素 rear指针指向队尾元素的下一个位置
+    队列为空时 front=rear  队列满时:保留一个元素空间 (rear+1)%QueueSize=front  (加上%QueueSize是预防frount=0,rear=QueueSize-1这种情况)
+    队列长度： （rear-front+QueueSize)%QueueSize
+        (1)rear>front时，rear-front+QueueSize>QueueSize,表达式（rear-front+QueueSize)%QueueSize相当于（rear-front)%QueueSize+QueueSize%QueueSize
+                =>  (rear-front)%QueueSize => rear-front
+        (2)rear<front时，ear-front+QueueSize>QueueSize,表达式（rear-front+QueueSize)%QueueSize相当于rear-front+QueueSize
+
+
